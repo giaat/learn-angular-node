@@ -1,0 +1,30 @@
+{
+  "name": "learn-angular-node",
+  "version": "0.1.0",
+  "description": "Project used to teach basic concepts of using angular and node for a REST API development.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dixeed/learn-angular-node.git"
+  },
+  "keywords": [
+    "node",
+    "angular",
+    "teaching",
+    "hapi"
+  ],
+  "author": "Nargonath",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dixeed/learn-angular-node/issues"
+  },
+  "homepage": "https://github.com/dixeed/learn-angular-node#readme",
+  "dependencies": {
+    "boom": "^3.1.2",
+    "hapi": "^13.0.0"
+  }
+}
