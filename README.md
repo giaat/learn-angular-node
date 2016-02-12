@@ -50,9 +50,9 @@ Now that's your job to implement these routes! For the moment we are not using a
 function getUser(id) {
   return {
     id: id,
-    name: 'Jesus',
-    surname: 'Christ',
-    email: 'j.christ@heaven.org'
+    name: 'Darth',
+    surname: 'Vador',
+    email: 'd.vador@darkside.org'
   };
 }
 ````
