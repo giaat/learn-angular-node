@@ -9,12 +9,23 @@ This project is split into 2 parts:
 
 We are going to build a TODO application. For simplicity sake, we are going to have only one entity which is __Task__.
 
-At the end of the project we will have a simple application to handle TODO tasks that contact a REST API on the server.
+At the end of the project we will have a simple application to handle TODO tasks that contacts a REST API on the server.
+
+## Project structure
+The project is split in 2 folders: `client/` and `server/`. All angular related codes will be put into the first, and all NodeJS code will be in the second.
 
 ## The server
-Node is a JavaScript runtime to be used on the server. You can do as much as you would do with Python or another scripting language. In this project we are using Node for web development. In that context, we are going to use a web framework: [Hapi](http://hapijs.com/).
+NodeJS is a JavaScript runtime to be used on the server. You can do as much as you would do with Python or another scripting language. Node is used in conjunction with [NPM](https://www.npmjs.com/), his package manager.
 
-There are other alternatives such as [Express](http://expressjs.com/) but that's not what we are going to learn.
+In this project we are using Node for web development. In that context, we are going to use a web framework: [Hapi](http://hapijs.com/). There are other alternatives such as [Express](http://expressjs.com/) but that's not what we are going to learn.
+
+### Node basic knowledge
+NodeJS is based around the __module__ concept. I recommend you to read [that part](https://nodejs.org/docs/latest/api/modules.html#modules_modules) of NodeJS official documentation. In order to use these modules in our code, we need a module loader. Don't worry I am not going to ask you to write one, someone already did it: [RequireJS](http://requirejs.org/).
+
+### Folder structure
+Every NodeJS server has a main file from which the server is started. In this file you will find the server initialization and configuration. It is also the file which bootstraps your application - put all the pieces of your server together -. By convention it is called `index.js` but that's not a must-do. In our case it is called `server.js` and you can find it at the root of `server/`.
+
+Now have a look at `server.js`. Use the previous section and [Hapi's official API](http://hapijs.com/api) to understand what it does.
 
 ### Section 1: Basic commands
 This section suppose you already have __Node__ and __NPM__ installed and configured on your local machine. If it is not the case, please refer to Dixeed's internal documentation.
@@ -25,7 +36,7 @@ The commands below are to use in your own terminal.
 
 1. `node index.js` to start your server. Another way of running your server is using NPM's script: `npm start` which is just an alias for the previous command. Prefer using the last as it is a way to standardize your server starting command.
 
-2. `node` to access a node CLI where you can execute JavaScript code. It is useful to make quick tests on something without writing a proper file for it.
+2. `node` to access a Node CLI where you can execute JavaScript code. It is useful to make quick tests on something without writing a proper file for it.
 
 3. `npm install [packageName]` to install a package in your project. If you don't provide a package name it will install all the dependencies written in your `package.json`. This will download the package into the `node_modules` folder at your project root. If you want to mark this package as a dependency in your project you need to add the flag `--save` and respectively `--save-dev` for a development dependency. When using the above flags, the dependency will be written in your __package.json__ along with their [semver](https://github.com/npm/node-semver) version notation.
 
@@ -47,14 +58,27 @@ Let's now dive into our server needs ... For the client to interact with our ser
 Now that's your job to implement these routes! For the moment we are not using any database, we will dive into that later. If you need data, just use JS objects with dummy information. For example:
 ````javascript
 
-function getUser(id) {
-  return {
-    id: id,
+var userDb = {
+  1: {
+    id: 1,
     name: 'Darth',
     surname: 'Vador',
     email: 'd.vador@darkside.org'
-  };
+  },
+  10: {
+    id: 10,
+    name: 'Skywalker',
+    surname: 'Luke',
+    email: 'l.skywalker@brightside.org'
+  }
+};
+
+function getUser(id) {
+  // here you are just acting as if you retrieved data from the database even though that's not the case
+  return userDb[id];
 }
 ````
+
+If you want to debug your API you can use [Postman](https://www.getpostman.com/) which is available as Chrome app or Mac App. Prefer testing in your terminal? Check out [curl](https://curl.haxx.se/).
 
 You can find some help in [Hapi's routing tutorial](http://hapijs.com/tutorials/routing) and in [Hapi's API](http://hapijs.com/api).
