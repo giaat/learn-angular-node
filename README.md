@@ -93,15 +93,15 @@ You can find some help in [Hapi's routing tutorial](http://hapijs.com/tutorials/
 Have you already finished section 1? If you do, remember to tag it before you go on to the next section. Please, refer to [Instructions](#instructions) if you forgot.
 
 ### Section 3 : As Mom said, "DO YOUR TESTS!"
-Now that we have a server which accepts http request and responds accordingly, we need to write __tests__! I am already hearing you out: "Buuuttt we already tested our server using Postman as you suggested in the last section!!!". I know, I know, that's what I said. But! Are you going to run these tests by yourself every time you want to make sure it is still working as intended? Let me ask again, __ARE YOU SURE__ you want to run these tests __every time__ you add a feature to your server to check that it didn't break something?
+Now that we have a server which accepts HTTP requests and responds accordingly, we need to write __tests__! I hear you out already: "Buuuttt we already tested our server using Postman as you suggested in the last section!!!". I know, I know, that's what I said. But! Are you going to run these tests by yourself every time you want to make sure it is still working as intended? Let me ask again, __ARE YOU SURE__ you want to run these tests __every time__ you add a feature to your server to check that it didn't break something?
 
 ![How-about-no bear](http://i1.kym-cdn.com/photos/images/original/000/129/577/1a4.jpg)
 
 As your application grows so should your test suites! Redoing every test by yourself is just a waste of time therefore we are going to write __unit tests__.
 
-First thing first, we could just write some JavaScript files that require our `server.js` to test it however we need the tests to quit when the code does not match our requirements. For that matter we use an __assertion library__ that provides functions we can use that throws errors when things are not happening as we want them to. We are going to use [assert](https://nodejs.org/api/assert.html) which is included by default in NodeJS.
+First thing first, we could just write some JavaScript files that require our `server.js` to test it however we need the tests to quit when the code does not match our requirements. For that matter we use an __assertion library__ that provides functions we can use that throws errors when things are not happening as we want them to. The library we use is [assert](https://nodejs.org/api/assert.html). It is included by default in NodeJS.
 
-Another thing we do not want as well is running ourselves every test one by one. We need a __test runner__. We are lucky! A lot has already been done on the matter and great tools already exists. We are going to use [Mocha](https://mochajs.org/). You need to add it to your server as a dev dependency (Psss, look [here](#section-1:-basic-commands)).
+Another thing we do not want is: running ourselves every test one by one. We need a __test runner__. We are lucky! A lot has already been done on the matter and great tools already exists. We are going to use [Mocha](https://mochajs.org/). You need to add it to your server as a dev dependency (Psss, look [here](#section-1:-basic-commands) ).
 
 We do not put our tests in the same folder as the code they are testing. You need to create a new folder called `test/` in `server/`. Inside this folder, just create an `index.js` file whose content is given below:
 
@@ -151,8 +151,8 @@ I just gave you the first test for your server. It tests your /tasks [GET] route
 * http://hapijs.com/api#serverinjectoptions-callback
 * https://mochajs.org/#synchronous-code. You will find what you seek from this point in their documentation.
 
-You can already run this test with `mocha test`, if you installed it globally (`npm install -g mocha`) on your local machine. Otherwise you could use `npm test` as you may have only installed it locally for your project. Mocha's output should print you all the tests in your `test/` folder whether they pass or not. All green? Yes then you are good to go otherwise you need to correct your code.
+You can already run this test with `npm test` as you may have only installed Mocha locally for your project. Otherwise you could use `mocha test` only if you installed it globally (`npm install -g mocha`) on your local machine. Mocha's output should print you all the tests in your `test/` folder whether they pass or not. All green? Yes, then you are good to go otherwise you need to correct your code.
 
-Now that's your turn to write your own test for the rest of your endpoint.
+Now that's your turn to write your own tests for the rest of your endpoint.
 
 Don't forget to [tag](#instructions) your code once this section is completed.
