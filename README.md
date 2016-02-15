@@ -86,6 +86,8 @@ function getUser(id) {
 }
 ````
 
+In order to handle error cases you can use [Boom](https://github.com/hapijs/boom). It is the HTTP error handling library developed by the Hapi team.
+
 If you want to debug your API you can use [Postman](https://www.getpostman.com/) which is available as a Chrome app or a Mac App. Prefer testing in your terminal? Check out [curl](https://curl.haxx.se/).
 
 You can find some help in [Hapi's routing tutorial](http://hapijs.com/tutorials/routing) and in [Hapi's API](http://hapijs.com/api).
@@ -153,6 +155,6 @@ I just gave you the first test for your server. It tests your /tasks [GET] route
 
 You can already run this test with `npm test` as you may have only installed Mocha locally for your project. Otherwise you could use `mocha test` only if you installed it globally (`npm install -g mocha`) on your local machine. Mocha's output should print you all the tests in your `test/` folder whether they pass or not. All green? Yes, then you are good to go otherwise you need to correct your code.
 
-Now that's your turn to write your own tests for the rest of your endpoint.
+Now that's your turn to write your own tests for the rest of your endpoint. Do not forget to test your edge case or error cases.
 
 Don't forget to [tag](#instructions) your code once this section is completed.
