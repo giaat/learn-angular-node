@@ -90,4 +90,4 @@ If you want to debug your API you can use [Postman](https://www.getpostman.com/)
 
 You can find some help in [Hapi's routing tutorial](http://hapijs.com/tutorials/routing) and in [Hapi's API](http://hapijs.com/api).
 
-Have finished section 1? If you do, remember to tag it before you go on to the next section. Please, refer to [Instructions](##instructions) if you forgot.
+Have finished section 1? If you do, remember to tag it before you go on to the next section. Please, refer to [Instructions](#instructions) if you forgot.
