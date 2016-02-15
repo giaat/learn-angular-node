@@ -5,14 +5,21 @@ This project is split into 2 parts:
 * The server (backend)
 * The client (frontend)
 
-## Goal
 
+## Goal
 We are going to build a TODO application. For simplicity sake, we are going to have only one entity which is __Task__.
 
 At the end of the project we will have a simple application to handle TODO tasks that contacts a REST API on the server.
 
+## Instructions
+Before we dive into the project, you need to __fork__ this repository into your own account. You will work in this fork and not the original repository. If you wonder how to fork Github already made a good [tutorial](https://help.github.com/articles/fork-a-repo/) about it. Once the fork is created you need to clone it on your local machine to get started.
+
+Once you complete a section, you need to tag that version of your code so we can come back to it later. You will create an annotated tag: `git tag -a myTagName -m "myTagMessage"`. For this project, use the name of the section you just completed as your tag name (i.e section1, section2 etc.). When you submit your code to your remote repository, remember to add `--tags` to your `git push` because it does not push the tags by default to the remote.
+
+
 ## Project structure
 The project is split in 2 folders: `client/` and `server/`. All angular related codes will be put into the first, and all NodeJS code will be in the second.
+
 
 ## The server
 NodeJS is a JavaScript runtime to be used on the server. You can do as much as you would do with Python or another scripting language. Node is used in conjunction with [NPM](https://www.npmjs.com/), his package manager.
@@ -82,3 +89,5 @@ function getUser(id) {
 If you want to debug your API you can use [Postman](https://www.getpostman.com/) which is available as Chrome app or Mac App. Prefer testing in your terminal? Check out [curl](https://curl.haxx.se/).
 
 You can find some help in [Hapi's routing tutorial](http://hapijs.com/tutorials/routing) and in [Hapi's API](http://hapijs.com/api).
+
+Have finished section 1? If you do, remember to tag it before you go on to the next section. Please, refer to [Instructions](##instructions) if you forgot.
