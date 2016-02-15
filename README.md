@@ -158,3 +158,10 @@ You can already run this test with `npm test` as you may have only installed Moc
 Now that's your turn to write your own tests for the rest of your endpoint. Do not forget to test your edge case or error cases.
 
 Don't forget to [tag](#instructions) your code once this section is completed.
+
+### Section 4: Would you like some validation with it?
+Validation is an important part of any development. Here we need to validate the data passed to your endpoints. Fortunately Hapi provides a validation library: [Joi](https://github.com/hapijs/joi). Routes configuration directly integrates Joi schema definition to apply on either path parameter, query parameter or payload. This time I am not going to give you the link what I am referring to. You will need to find it yourself on Hapi's website. Once you know what you need to do, just add validations to your endpoints.
+
+Do not forget to update your tests accordingly. Just add 1 or 2 tests for each endpoints so you get the idea but we do not need you to test every edge case.
+
+[Please, tag it!](#section-1-basic-commands)
