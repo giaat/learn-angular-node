@@ -164,4 +164,4 @@ Validation is an important part of any development. Here we need to validate the
 
 Do not forget to update your tests accordingly. Just add 1 or 2 tests for each endpoints so you get the idea but we do not need you to test every edge case.
 
-[Please, tag it!](#section-1-basic-commands)
+[Please, tag it!](#instructions)
