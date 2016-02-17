@@ -7,7 +7,7 @@ This project is split into 2 parts:
 
 
 ## Goal
-We are going to build a TODO application. For simplicity sake, we are going to have only one entity which is __Task__.
+We are going to build a TODO application. For simplicity sake, we are going to have only one entity which is __Task__. This entity will have 2 fields: title and content.
 
 At the end of the project we will have a simple application to handle TODO tasks that contacts a REST API on the server.
 
@@ -99,7 +99,7 @@ Now that we have a server which accepts HTTP requests and responds accordingly, 
 
 ![How-about-no bear](http://i1.kym-cdn.com/photos/images/original/000/129/577/1a4.jpg)
 
-As your application grows so should your test suites! Redoing every test by yourself is just a waste of time therefore we are going to write __unit tests__.
+As your application grows in size, so does your test suites! Redoing every test by yourself is just a waste of time therefore we are going to write __unit tests__.
 
 First thing first, we could just write some JavaScript files that require our `server.js` to test it however we need the tests to quit when the code does not match our requirements. For that matter we use an __assertion library__ that provides functions we can use that throws errors when things are not happening as we want them to. The library we use is [assert](https://nodejs.org/api/assert.html). It is included by default in NodeJS.
 
@@ -155,13 +155,67 @@ I just gave you the first test for your server. It tests your /tasks [GET] route
 
 You can already run this test with `npm test` as you may have only installed Mocha locally for your project. Otherwise you could use `mocha test` only if you installed it globally (`npm install -g mocha`) on your local machine. Mocha's output should print you all the tests in your `test/` folder whether they pass or not. All green? Yes, then you are good to go otherwise you need to correct your code.
 
-Now that's your turn to write your own tests for the rest of your endpoint. Do not forget to test your edge case or error cases.
+Now that's your turn to write your own tests for the rest of your endpoints. Do not forget to test your edge case or error cases.
 
 Don't forget to [tag](#instructions) your code once this section is completed.
 
 ### Section 4: Would you like some validation with it?
 Validation is an important part of any development. Here we need to validate the data passed to your endpoints. Fortunately Hapi provides a validation library: [Joi](https://github.com/hapijs/joi). Routes configuration directly integrates Joi schema definition to apply on either path parameter, query parameter or payload. This time I am not going to give you the link of what I am referring to. You need to find it yourself on Hapi's website. Once you know what you need to do, just add validations to your endpoints.
 
-Do not forget to update your tests accordingly. Just add 1 or 2 tests for each endpoints so you get the idea but we do not need you to test every edge case.
+Do not forget to update your tests accordingly. Just add 1 or 2 tests for each endpoints so you get the idea but we do not need you to test every edge case for this training.
 
 [Please, tag it!](#instructions)
+
+### Section 5: Go get me some real data!
+So far we have been using dummy data in our server but that would be nice if we could actually save the tasks we receive in order to send them back when asked for it.
+
+We want to use an ORM so we can have __DAO__ (Data Access Objects). We will be using [Sequelize](http://docs.sequelizejs.com/en/latest/docs/getting-started/). You need to install the npm package and its dependencies relative to the database you want to use. In this project we are going to use  PostgreSQL, refer to the link above for the installation steps.
+
+Now, we need to make the link between our Hapi server and Sequelize. Hapi provides a built-in plugin system to allow better code reuse. It offers a lot of different [plugins](http://hapijs.com/plugins) made by the community or the Hapi team. Here is a [plugin](https://github.com/danecando/hapi-sequelize) to make the link between the 2. You need to install it and mark it as a project dependency. Once installed, you need to explicitly tell your server that it needs to load that particular plugin. It is done through the `server.register()` [function](http://hapijs.com/api#serverregisterplugins-options-callback). Now, call this method in your `server.js` and pass the [needed options](https://github.com/danecando/hapi-sequelize#loading-the-plugin) to the plugin in order to access your database.
+
+So far we have a working connection to our database but nothing in it. We need to define a model that maps our __Task__ entity. There is an [example](https://github.com/danecando/hapi-sequelize#model-definitions) in the hapi-sequelize plugin. It would be better to put the model definition in its own file (so you could tell to the plugin where to find it through the `models` options). Create a `model.js` for that matter. The database `sync` Sequelize call should now create a table Task in your database.
+
+As we have created our model, the endpoints should use it instead of dummy data. You can access your model in your request handlers through `server.plugins['hapi-sequelize'].db.sequelize.models` however that's cumbersome. You can add a server extension to Hapi so it puts your models into `request.models` instead. See [Hapi's API documentation](http://hapijs.com/api#serverextevents) and [hapi-sequelize documentation](https://github.com/danecando/hapi-sequelize#add-models-to-hapi-request-object) for the way to achieve it.
+
+Before you dive into models operation, I suggest that you read the next section.
+
+#### I promise it will not hurt!
+The next step is to update your handlers for them to use the model in order to create/update/delete the proper Task data. When dealing with Sequelize you have to use __Promises__ to control asynchronous control-flow. Simply put, a promise is like an engagement for a value. A promise always returns a value (object, primitive, array ...). It can be either resolved or rejected, it cannot be both. A promise can be chained with some functions, I will show you the 2 most used: `then()` and `catch()`. The former is called when the promise it is chained to is resolved and the latter is called when the promise is rejected. You can chain `then()` and `catch()` call because both of this function return a promise. Here is an example:
+
+````javascript
+
+functionThatReturnsAPromise().then(function(value) {
+                                console.log('YAY!');
+                            })
+                            .catch(function(err) {
+                                console.log('Doh');
+                            });
+````
+
+`YAY!` will be printed only if the promise returned by `functionThatReturnsAPromise()` is resolved. If it is not resolved but rejected instead, `Doh` will be printed.
+
+Let's take a look at a more complex example:
+
+````javascript
+
+functionThatReturnsAPromise().then(function(value) {
+                                return anotherFunctionThatReturnsAPromise();
+                            })
+                            .then(function(secondValue) {
+                              return 4;
+                            })
+                            .then(function(integer) {
+                              console.log(integer);
+                            })
+                            .catch(function(err) {
+                                console.log('Doh');
+                            });
+````
+
+This time if the first promise returned by `functionThatReturnsAPromise()` is resolved we go into the first `then()` call which performs another asynchronous operation. That operation returns a promise as well so we can return the result of that function. As the first `then()` call returns a promise, it can be chained with another `then()`. In the second call we just return a primitive. _"How could we chain another `then()` in that case?"_. Well, `then()` and `catch()` always return a promise even though you did not return one explicitly. Internally it will wrap your returned value into a Promise. In that case, the third `then()` call will print `4`.
+
+Let's say the call to `anotherFunctionThatReturnsAPromise()` returns a rejected promise then the next 2 `then()` calls will be skipped and `catch()` will be called. It would be the same if a JavaScript error is thrown in a `then()` handler. One thing to remember is that any promise chain __should always be terminated by a `catch()` call__ and when I say always I mean __ALWAYS__! If you do not put one then your error will go silent and you will never know that there was even one to begin with!
+
+Bear in mind that this little introduction on Promises was only meant for you to know how to use them. We did not see how to create a Promise ourselves nor other operations you can perform on them. If you want to learn more, [here](https://github.com/wbinnssmith/awesome-promises) is list of resources you can read.
+
+Now that you start to grasp how Promises can be used, you need to implement the different models operation into your request handlers. Refer to [this](http://docs.sequelizejs.com/en/latest/docs/models-usage/) and [this](http://docs.sequelizejs.com/en/latest/docs/instances/). Don't forget to update your unit tests and to tag your code once it is completed.
