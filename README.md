@@ -12,9 +12,9 @@ We are going to build a TODO application. For simplicity sake, we are going to h
 At the end of the project we will have a simple application to handle TODO tasks that contacts a REST API on the server.
 
 ## Instructions
-Before we dive into the project, you need to __fork__ this repository into your own account. You will work in this fork and not the original repository. If you wonder how to fork Github already made a good [tutorial](https://help.github.com/articles/fork-a-repo/) about it. Once the fork is created you need to clone it on your local machine to get started.
+Before we dive into the project, you need to __fork__ this repository into your own account. You will work in this fork and not the original repository. If you wonder how to fork, Github already made a good [tutorial](https://help.github.com/articles/fork-a-repo/) about it. Once the fork is created you need to clone it on your local machine to get started.
 
-Once you complete a section, you need to tag that version of your code so we can come back to it later. You will create an annotated tag: `git tag -a myTagName -m "myTagMessage"`. For this project, use the name of the section you just completed as your tag name (i.e section1, section2 etc.). When you submit your code to your remote repository, remember to add `--tags` to your `git push` because it does not push the tags by default to the remote.
+Once you complete a section, you need to tag that version of your code so we can come back to it later. Before tagging, your code should be committed. You will create an annotated tag: `git tag -a myTagName -m "myTagMessage"`. Noticed that we did not give any commit hash to the tag function so it will take the last commit as the reference for the tag. For this project, use the name of the section you just completed as your tag name (i.e section1, section2 etc.). When you submit your code to your remote repository, remember to add `--tags` to your `git push` because it does not push the tags by default to the remote.
 
 
 ## Project structure
