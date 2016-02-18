@@ -234,3 +234,84 @@ First, you need to create a folder `server/lib` which contains all our plugins. 
 The end goal of splitting your codebase to plugins is to reuse them in other projects. You could upload these plugins on a private NPM server and install as you do for any other npm libraries. In order to do that, each plugin would require to have its own `package.json` to specify all the dependencies. It is not the purpose of this training but that's something worth keeping in mind.
 
 Once you have created your plugin remember that you need to load it in the main `index.js` and remember to tag the code once done.
+
+### Section 7: Externalize your configuration
+So far we have multiple configuration values throughout our project. If we need to reuse some data we would need to duplicate them which is far from ideal. Fortunately Hapi provides a configuration library: [Confidence](https://github.com/hapijs/confidence). We will use this lib to regroup all our configuration data such as the database connection information. In the future when we need to make a change, there is only one place to look at. In addition there are some data that should be hidden from your VCS (Version Control Software) in our case Git. These data are any confidential data such as cryptographic information (authentication key for example), or your database credentials. For us to achieve that we will need a JSON file where the confidential data will be stored and we will add this file to your `.gitignore` at our project root. Our configuration file will use this _ignored_ file to get the information needed but the exact value will be hidden to Git. The rule of thumb here is that you never know how your project will evolved. Perhaps at the beginning of your project your repository is private and only trusted person have access to it. In that case we do not care that sensible data are versioned however your repository might not stay private forever. At some point in your application lifetime, you might want to open-source it but we do not want people to access our sensitive data from our Git repository history.
+
+Do not forget that Confidence is a package that needs to be installed through NPM and marked as a dependency of your project. Regarding Confidence-related code, we will put it inside a `config/` folder at the project root. Create an `index.js` file inside and put the content show below:
+
+````javascript
+
+'use strict';
+
+var Confidence = require('confidence');
+var dbCredentials = require('./database/credentials');
+var store;
+var criteria;
+
+exports.get = function(key) {
+  return store.get(key, criteria);
+};
+
+store = new Confidence.Store({
+  database: {
+    credentials: {
+      $filter: 'env',
+      dev: {
+        dbName: dbCredentials.dev.database,
+        user: dbCredentials.dev.user,
+        pass: dbCredentials.dev.pass,
+        dialect: dbCredentials.dev.dialect,
+        host: dbCredentials.dev.host,
+        port: dbCredentials.dev.port
+      },
+      test: {
+        dbName: dbCredentials.test.database,
+        user: dbCredentials.test.user,
+        pass: dbCredentials.test.pass,
+        dialect: dbCredentials.test.dialect,
+        host: dbCredentials.test.host,
+        port: dbCredentials.test.port,
+      }
+    }
+  },
+
+  server: {
+    host: process.env.COMPARE_FOOD_HOST || 'localhost',
+    port: process.env.COMPARE_FOOD_PORT || 8890
+  }
+});
+
+criteria = {
+  env: process.env.NODE_ENV || 'prod'
+};
+
+````
+
+In the `config/` folder, we have a sub-folder `database/` used to store database related information. It contains a `credentials.json` file which is ignored by Git and that stores the sensitive data as explained earlier. The structure of this file is as follow:
+
+````json
+
+{
+  "dev": {
+    "database": "dev",
+    "user": "userDev",
+    "pass": "myBigPassword",
+    "dialect": "postgres",
+    "host": "localhost",
+    "port": 1010
+  },
+  "test": {
+    "database": "test",
+    "user": "userTest",
+    "pass": "myBigPassword",
+    "dialect": "postgres",
+    "host": "localhost",
+    "port": 1010
+  }
+}
+````
+
+The JSON object is composed of 2 properties: `dev` and `test`. This structure allows us to use Confidence `$filter` feature. This feature allows to have conditional values depending on a parameter. You have an exemple in the JavaScript code above.
+
+Now remove the database configuration information from your `server/` code and use Confidence instead to access the information. Look through your code if there are other values that you could export into Confidence as well and do it if so.
