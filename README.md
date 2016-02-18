@@ -219,3 +219,18 @@ Let's say the call to `anotherFunctionThatReturnsAPromise()` returns a rejected 
 Bear in mind that this little introduction on Promises was only meant for you to know how to use them. We did not see how to create a Promise ourselves nor other operations you can perform on them. If you want to learn more, [here](https://github.com/wbinnssmith/awesome-promises) is a list of resources you can read.
 
 Now that you start to grasp how Promises can be used, you need to implement the different models operation into your request handlers. Refer to [this](http://docs.sequelizejs.com/en/latest/docs/models-usage/) and [this](http://docs.sequelizejs.com/en/latest/docs/instances/). Don't forget to update your unit tests and to tag your code once it is completed.
+
+After that you will have a working basic REST API server!
+
+![Congrats meme](http://cdn.meme.am/instances/400x/55597118.jpg)
+
+### Section 6: Make it beautiful, make it a plugin!
+Did you think it was over? Well, __NO__!
+
+So far we have put all our code into our `server.js` which is fine for a short training project as this one but we want you to be ready for the _real world_! Imagine if you have 50 endpoints on your server, would you put all of them in your `server.js`? Of course not! Here we are going to take advantage of Hapi's great plugin system.
+
+First, you need to create a folder `server/lib` which contains all our plugins. In this folder, you will create another folder `task`. Create an `index.js` file in it. Get inspired from [Hapi's plugin tutorial](http://hapijs.com/tutorials/plugins) to create your own plugin. You need to put all the code relative to the Task entity in this plugin. Something you need to ask yourself when making a plugin is: "Can I use it in another project only by taking this plugin code?". The answer should be yes. It should be standalone. It should not require anything external to work. You can even split your routes definition code by taking out the handlers in another NodeJS module, let's say `handlers.js`. You would then require that file into your `index.js` to use it. Splitting your project into plugins should make it easier to write tests because there are no tight dependencies. Each plugin can be tested on its own. You could test the route definition on their own and also test the handlers on their own. As I think you have guessed it, you need to update your unit tests.
+
+The end goal of splitting your codebase to plugins is to reuse them in other projects. You could upload these plugins on a private NPM server and install as you do for any other npm libraries. In order to do that, each plugin would require to have its own `package.json` to specify all the dependencies. It is not the purpose of this training but that's something worth keeping in mind.
+
+Once you have created your plugin remember that you need to load it in the main `index.js` and remember to tag the code once done.
