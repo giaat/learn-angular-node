@@ -103,7 +103,7 @@ As your application grows in size, so does your test suites! Redoing every test 
 
 First thing first, we could just write some JavaScript files that require our `server.js` to test it however we need the tests to quit when the code does not match our requirements. For that matter we use an __assertion library__ that provides functions we can use that throws errors when things are not happening as we want them to. The library we use is [assert](https://nodejs.org/api/assert.html). It is included by default in NodeJS.
 
-Another thing we do not want is: running ourselves every test one by one. We need a __test runner__. We are lucky! A lot has already been done on the matter and great tools already exists. We are going to use [Mocha](https://mochajs.org/). You need to add it to your server as a dev dependency (Psss, look [here](#<-commands)).
+Another thing we do not want is: running ourselves every test one by one. We need a __test runner__. We are lucky! A lot has already been done on the matter and great tools already exists. We are going to use [Mocha](https://mochajs.org/). You need to add it to your server as a dev dependency (Psss, look [here](#basic-commands)).
 
 We do not put our tests in the same folder as the code they are testing. You need to create a new folder called `test/` in `server/`. Inside this folder, just create an `index.js` file whose content is given below:
 
