@@ -14,7 +14,7 @@ At the end of the project we will have a simple application to handle TODO tasks
 ## Instructions
 Before we dive into the project, you need to __fork__ this repository into your own account. You will work in this fork and not the original repository. If you wonder how to fork, Github already made a good [tutorial](https://help.github.com/articles/fork-a-repo/) about it. Once the fork is created you need to clone it on your local machine to get started.
 
-Once you complete a section, you need to tag that version of your code so we can come back to it later. Before tagging, your code should be committed. You will create an annotated tag: `git tag -a myTagName -m "myTagMessage"`. Noticed that we did not give any commit hash to the tag function so it will take the last commit as the reference for the tag. For this project, use the name of the section you just completed as your tag name (i.e section1, section2 etc.). When you submit your code to your remote repository, remember to add `--tags` to your `git push` because it does not push the tags by default to the remote.
+Once you complete a section, you need to tag that version of your code so we can come back to it later. Before tagging, your code should be committed. You will create an annotated tag: `git tag -a myTagName -m "myTagMessage"`. Noticed that we did not give any commit hash to the tag function so it will take the last commit as the tag reference. For this project, use the name of the section you just completed as your tag name (i.e section1, section2 etc.). When you submit your code to your remote repository, remember to add `--tags` to your `git push` because it does not push the tags to the remote by default.
 
 
 ## Project structure
@@ -27,14 +27,14 @@ NodeJS is a JavaScript runtime to be used on the server. You can do as much as y
 In this project we are using Node for web development. In that context, we are going to use a web framework: [Hapi](http://hapijs.com/). There are other alternatives such as [Express](http://expressjs.com/) but that's not what we are going to learn.
 
 ### Node basic knowledge
-NodeJS is based around the __module__ concept. I recommend you to read [that part](https://nodejs.org/docs/latest/api/modules.html#modules_modules) of NodeJS official documentation. In order to use these modules in our code, we need a module loader. Don't worry I am not going to ask you to write one, someone already did it: [RequireJS](http://requirejs.org/).
+NodeJS is based around the __module__ concept. I recommend you to read [that part](https://nodejs.org/docs/latest/api/modules.html#modules_modules) of NodeJS official documentation. In order to use these modules in our code, we need a __module loader__. Do not worry I am not going to ask you to write one, someone already did it: [RequireJS](http://requirejs.org/). It is already shipped within NodeJS so no need to worry about it.
 
 ### Folder structure
 Every NodeJS server has a main file from which the server is started. In this file you will find the server initialization and configuration. It is also the file which bootstraps your application - put all the pieces of your server together -. By convention it is called `index.js` but that's not a must-do. In our case it is called `server.js` and you can find it at the root of `server/`.
 
 Now have a look at `server.js`. Use the previous section and [Hapi's official API](http://hapijs.com/api) to understand what it does.
 
-### Section 1: Basic commands
+### Basic commands
 This section suppose you already have __Node__ and __NPM__ installed and configured on your local machine. If it is not the case, please refer to Dixeed's internal documentation.
 
 NPM uses a file named `package.json` to store information about your project.
@@ -51,10 +51,10 @@ The commands below are to use in your own terminal.
 
 NPM's commands are registered in the package.json scripts section of your project. Some keywords are registered for npm such as `start`, `test`, amongst others. If you want to use a script you defined that is not using NPM's keywords, you need to run: `npm run yourScriptName`.
 
-### Section 2: Build your API endpoints
-Simply put, a REST API is collection of [Web Services](https://en.wikipedia.org/wiki/Web_service) accessible through the HTTP(s) protocol.
+### Section 1: Build your API endpoints
+Simply put, a REST API is a collection of [Web Services](https://en.wikipedia.org/wiki/Web_service) accessible through the HTTP(s) protocol.
 
-Let's now dive into our server needs ... For the client to interact with our server, it needs to call the Web Services methods to communicate with it that's what we call __endpoints__. Here is the list of the endpoints we want to use:
+Let's now dive into our server requirements ... For the client to interact with our server, it has to call the Web Services methods to communicate with it. This methods are called __endpoints__. Here is the list of the endpoints we want to use:
 
 * `/tasks` [GET] : returns a list of the tasks
 * `/tasks/{id}` [GET] : returns the complete information of a task referenced by its id.
@@ -88,13 +88,13 @@ function getUser(id) {
 
 In order to handle error cases you can use [Boom](https://github.com/hapijs/boom). It is the HTTP error handling library developed by the Hapi team.
 
-If you want to debug your API you can use [Postman](https://www.getpostman.com/) which is available as a Chrome app or a Mac App. Prefer testing in your terminal? Check out [curl](https://curl.haxx.se/).
+If you want to debug your API you can use [Postman](https://www.getpostman.com/) which is available as a Chrome app or a Mac App. If you prefer to test in your terminal, check out [curl](https://curl.haxx.se/).
 
 You can find some help in [Hapi's routing tutorial](http://hapijs.com/tutorials/routing) and in [Hapi's API](http://hapijs.com/api).
 
-Have you already finished section 1? If you do, remember to tag it before you go on to the next section. Please, refer to [Instructions](#instructions) if you forgot.
+Have you already finished section 1? If you do, remember to tag it before you go on to the next section. Please, refer to the [instructions](#instructions) if you forgot.
 
-### Section 3 : As Mom said, "DO YOUR TESTS!"
+### Section 2 : As Mom said, "DO YOUR TESTS!"
 Now that we have a server which accepts HTTP requests and responds accordingly, we need to write __tests__! I hear you out already: "Buuuttt we already tested our server using Postman as you suggested in the last section!!!". I know, I know, that's what I said. But! Are you going to run these tests by yourself every time you want to make sure it is still working as intended? Let me ask again, __ARE YOU SURE__ you want to run these tests __every time__ you add a feature to your server to check that it didn't break something?
 
 ![How-about-no bear](http://i1.kym-cdn.com/photos/images/original/000/129/577/1a4.jpg)
@@ -103,7 +103,7 @@ As your application grows in size, so does your test suites! Redoing every test 
 
 First thing first, we could just write some JavaScript files that require our `server.js` to test it however we need the tests to quit when the code does not match our requirements. For that matter we use an __assertion library__ that provides functions we can use that throws errors when things are not happening as we want them to. The library we use is [assert](https://nodejs.org/api/assert.html). It is included by default in NodeJS.
 
-Another thing we do not want is: running ourselves every test one by one. We need a __test runner__. We are lucky! A lot has already been done on the matter and great tools already exists. We are going to use [Mocha](https://mochajs.org/). You need to add it to your server as a dev dependency (Psss, look [here](#section-1-basic-commands)).
+Another thing we do not want is: running ourselves every test one by one. We need a __test runner__. We are lucky! A lot has already been done on the matter and great tools already exists. We are going to use [Mocha](https://mochajs.org/). You need to add it to your server as a dev dependency (Psss, look [here](#<-commands)).
 
 We do not put our tests in the same folder as the code they are testing. You need to create a new folder called `test/` in `server/`. Inside this folder, just create an `index.js` file whose content is given below:
 
@@ -159,19 +159,19 @@ Now that's your turn to write your own tests for the rest of your endpoints. Do 
 
 Don't forget to [tag](#instructions) your code once this section is completed.
 
-### Section 4: Would you like some validation with it?
+### Section 3: Would you like some validation with it?
 Validation is an important part of any development. Here we need to validate the data passed to your endpoints. Fortunately Hapi provides a validation library: [Joi](https://github.com/hapijs/joi). Routes configuration directly integrates Joi schema definition to apply on either path parameter, query parameter or payload. This time I am not going to give you the link of what I am referring to. You need to find it yourself on Hapi's website. Once you know what you need to do, just add validations to your endpoints.
 
 Do not forget to update your tests accordingly. Just add 1 or 2 tests for each endpoints so you get the idea but we do not need you to test every edge case for this training.
 
 [Please, tag it!](#instructions)
 
-### Section 5: Go get me some real data!
+### Section 4: Go get me some real data!
 So far we have been using dummy data in our server but that would be nice if we could actually save the tasks we receive in order to send them back when asked for it.
 
 We want to use an ORM so we can have __DAO__ (Data Access Objects) and ease the interaction with the database. We will be using [Sequelize](http://docs.sequelizejs.com/en/latest/docs/getting-started/). You need to install the npm package and its dependencies based on the database you want to use. In this project we are going to use PostgreSQL, refer to the link above for the installation steps.
 
-Now, we need to make the link between our Hapi server and Sequelize. Hapi provides a built-in plugin system to allow better code reuse. It offers a lot of different [plugins](http://hapijs.com/plugins) made by the community or the Hapi team. Here is a [plugin](https://github.com/danecando/hapi-sequelize) to make the link between the 2. You need to install it and mark it as a project dependency. Once installed, you need to explicitly tell your server that it needs to load that particular plugin. It is done through the `server.register()` [function](http://hapijs.com/api#serverregisterplugins-options-callback). Now, call this method in your `server.js` and pass the [needed options](https://github.com/danecando/hapi-sequelize#loading-the-plugin) to the plugin in order to access your database.
+Now, we need to make the link between our Hapi server and Sequelize. Hapi provides a built-in plugin system to allow better code reuse and code separation. It offers a lot of different [plugins](http://hapijs.com/plugins) made by the community or the Hapi team. Here is a [plugin](https://github.com/danecando/hapi-sequelize) to make the link between the 2. You need to install it and mark it as a project dependency. Once installed, you need to explicitly tell your server that it needs to load that particular plugin. It is done through the `server.register()` [function](http://hapijs.com/api#serverregisterplugins-options-callback). Now, call this method in your `server.js` and pass the [needed options](https://github.com/danecando/hapi-sequelize#loading-the-plugin) to the plugin in order to access your database.
 
 So far we have a working connection to our database but nothing in it. We need to define a model that maps our __Task__ entity. There is an [example](https://github.com/danecando/hapi-sequelize#model-definitions) in the hapi-sequelize plugin. It would be better to put the model definition in its own file (so you could tell to the plugin where to find it through the `models` options). Create a `model.js` for that matter. The database `sync` Sequelize call should now create a table Task in your database.
 
@@ -180,7 +180,7 @@ As we have created our model, the endpoints should use it instead of dummy data.
 Before you dive into models operation, I suggest that you read the next section.
 
 #### I promise it will not hurt!
-The next step is to update your handlers for them to use the model in order to create/update/delete the proper Task data. When dealing with Sequelize you have to use __Promises__ to control asynchronous control-flow. Simply put, a promise is like an engagement for a value. A promise always returns a value (object, primitive, array ...). It can be either resolved or rejected, it cannot be both. A promise can be chained with some functions, I will show you the 2 most used: `then()` and `catch()`. The former is called when the promise it is chained to is resolved and the latter is called when the promise is rejected. You can chain `then()` and `catch()` call because both of this function return a promise. Here is an example:
+The next step is to update your handlers for them to use the model in order to create/update/delete the proper Task data. When dealing with Sequelize you have to use __Promises__ to control asynchronous control-flow. Simply put, a promise is like an engagement for a value. A promise always returns a value (object, primitive, array ...). It can be either pending, resolved or rejected, it can be only in one of these state. A promise can be chained with some functions, I will show you the 2 most used: `then()` and `catch()`. The former is called when the promise it is chained to is resolved and the latter is called when the promise is rejected. You can chain `then()` and `catch()` call because both of this function return a promise. Here is an example:
 
 ````javascript
 
@@ -215,6 +215,7 @@ functionThatReturnsAPromise().then(function(value) {
 This time if the first promise returned by `functionThatReturnsAPromise()` is resolved we go into the first `then()` call which performs another asynchronous operation. That operation returns a promise as well so we can return the result of that function. As the first `then()` call returns a promise, it can be chained with another `then()`. In the second call we just return a primitive. _"How could we chain another `then()` in that case?"_. Well, `then()` and `catch()` always return a promise even though you did not return one explicitly. Internally it will wrap your returned value into a Promise. In that case, the third `then()` call will print `4`.
 
 Let's say the call to `anotherFunctionThatReturnsAPromise()` returns a rejected promise then the next 2 `then()` calls will be skipped and `catch()` will be called. It would be the same if a JavaScript error is thrown in a `then()` handler. One thing to remember is that any promise chain __should always be terminated by a `catch()` call__ and when I say always I mean __ALWAYS__! If you do not put one then your error will go silent and you will never know that there was even one to begin with!
+![Good luck meme](http://cdn.meme.am/instances/63982759.jpg)
 
 Bear in mind that this little introduction on Promises was only meant for you to know how to use them. We did not see how to create a Promise ourselves nor other operations you can perform on them. If you want to learn more, [here](https://github.com/wbinnssmith/awesome-promises) is a list of resources you can read.
 
@@ -224,23 +225,23 @@ After that you will have a working basic REST API server!
 
 ![Congrats meme](http://cdn.meme.am/instances/400x/55597118.jpg)
 
-### Section 6: Make it beautiful, make it a plugin!
+### Section 5: Make it beautiful, make it a plugin!
 Did you think it was over? Well, __NO__!
 
 So far we have put all our code into our `server.js` which is fine for a short training project as this one but we want you to be ready for the _real world_! Imagine if you have 50 endpoints on your server, would you put all of them in your `server.js`? Of course not! Here we are going to take advantage of Hapi's great plugin system.
 
-First, you need to create a folder `server/lib` which contains all our plugins. In this folder, you will create another folder `task`. Create an `index.js` file in it. Get inspired from [Hapi's plugin tutorial](http://hapijs.com/tutorials/plugins) to create your own plugin. You need to put all the code relative to the Task entity in this plugin. Something you need to ask yourself when making a plugin is: "Can I use it in another project only by taking this plugin code?". The answer should be yes. It should be standalone. It should not require anything external to work. You can even split your routes definition code by taking out the handlers in another NodeJS module, let's say `handlers.js`. You would then require that file into your `index.js` to use it. Splitting your project into plugins should make it easier to write tests because there are no tight dependencies. Each plugin can be tested on its own. You could test the route definition on their own and also test the handlers on their own. As I think you have guessed it, you need to update your unit tests.
+First, you need to create a folder `server/lib` which contains all our plugins. In this folder, you will create another folder `task`. Create an `index.js` file in it. Get inspired from [Hapi's plugin tutorial](http://hapijs.com/tutorials/plugins) to create your own plugin. You need to put all the code relative to the Task entity in this plugin. Something you need to ask yourself when making a plugin is: "Can I use it in another project only by taking this plugin code?". The answer should be yes. It should be standalone. It should not require anything external to work (except external configuration values of course). You can even split your routes definition code by taking out the handlers in another NodeJS module, let's say `handlers.js`. You would then require that file into your `index.js` to use it. Splitting your project into plugins should make it easier to write tests because there are no tight dependencies. Each plugin can be tested on its own. You could test the route definition on their own and also test the handlers on their own. As I think you have guessed it, you need to update your unit tests. Your `test/` folder should replicate your `lib/` folder structure so if you create a `task/` folder in `lib/` do it as well in the test folder and put all the test related code of Task in it.
 
-The end goal of splitting your codebase to plugins is to reuse them in other projects. You could upload these plugins on a private NPM server and install as you do for any other npm libraries. In order to do that, each plugin would require to have its own `package.json` to specify all the dependencies. It is not the purpose of this training but that's something worth keeping in mind.
+The end goal of splitting your codebase to plugins is to reuse them in other projects. You could upload these plugins on a private NPM server and install them as you do for any other NPM libraries. In order to do that, each plugin would require to have its own `package.json` to specify all the dependencies. It is not the purpose of this training but that's something worth keeping in mind.
 
 Once you have created your plugin remember that you need to load it in the main `index.js` and remember to tag the code once done.
 
-### Section 7: Externalize your configuration
-So far we have multiple configuration values throughout our project. If we need to reuse some data we would need to duplicate them which is far from ideal. Fortunately Hapi provides a configuration library: [Confidence](https://github.com/hapijs/confidence). We will use this lib to regroup all our configuration data such as the database connection information. In the future when we need to make a change, there is only one place to look at. In addition there are some data that should be hidden from your VCS (Version Control Software), in our case Git. An example of confidential data would be cryptographic information (authentication key, etc.), or your database credentials. 
+### Section 6: Externalize your configuration
+So far we have multiple configuration values throughout our project. If we need to reuse some data we would need to duplicate them which is far from ideal. Fortunately Hapi provides a configuration library: [Confidence](https://github.com/hapijs/confidence). We will use this lib to regroup all our configuration data such as the database connection information. In the future when we need to make a change, there is only one place to look at. In addition there are some data that should be hidden from your VCS (Version Control Software), in our case Git. An example of confidential data would be cryptographic information (authentication key, etc.), or your database credentials.
 
-For us to achieve that we will need a JSON file where the confidential data will be stored and we will add this file to your `.gitignore` at our project root. Our configuration file will use this _ignored_ file to get the information needed but the exact value will be hidden to Git. The rule of thumb here is that you never know how your project will evolved. Perhaps at the beginning of your project your repository is private and only trusted person have access to it. In that case we do not care that sensible data are versioned however your repository might not stay private forever. At some point in your application lifetime, you might want to open-source it but we do not want people to access our sensitive data from our Git repository history.
+For us to achieve that we will need a JSON file where the confidential data will be stored and we will add this file to our `.gitignore` at our project root. Our configuration file will use this _ignored_ file to get the information needed but the exact value will be hidden to Git. The rule of thumb here is that you never know how your project will evolved. Perhaps at the beginning of your project your repository is private and only trusted person have access to it. In that case we do not care that sensible data are versioned however your repository might not stay private forever. At some point in your application lifetime, you might want to open-source it but we do not want people to access our sensitive data from our Git repository history.
 
-Do not forget that Confidence is a package that needs to be installed through NPM and marked as a dependency of your project. Regarding Confidence-related code, we will put it inside a `config/` folder at the project root. Create an `index.js` file inside and put the content show below:
+Do not forget that Confidence is a package that needs to be installed through NPM and marked as a dependency of your project. Regarding Confidence-related code, we will put it inside a `config/` folder at the project root. Create an `index.js` file inside and put the content shown below:
 
 ````javascript
 
@@ -317,3 +318,5 @@ In the `config/` folder, we have a sub-folder `database/` used to store database
 The JSON object is composed of 2 properties: `dev` and `test`. This structure allows us to use Confidence `$filter` feature. This feature allows to have conditional values depending on a parameter. You have an exemple in the JavaScript code above.
 
 Now remove the database configuration information from your `server/` code and use Confidence instead to access the information. Look through your code if there are other values that you could export into Confidence as well and do it if so.
+
+This is the end, my only friend, the end ...
