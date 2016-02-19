@@ -319,4 +319,7 @@ The JSON object is composed of 2 properties: `dev` and `test`. This structure al
 
 Now remove the database configuration information from your `server/` code and use Confidence instead to access the information. Look through your code if there are other values that you could export into Confidence as well and do it if so.
 
-This is the end, my only friend, the end ...
+Your server is now ready to be used by a client. We will use create a client in the next part of this project.
+
+## The client (under construction)
+![under construction](http://dixeed.com/wp-content/uploads/2016/01/Under_Construction-300x300.png)
