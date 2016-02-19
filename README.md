@@ -39,7 +39,7 @@ This section suppose you already have __Node__ and __NPM__ installed and configu
 
 NPM uses a file named `package.json` to store information about your project.
 
-The commands below are to use in your own terminal.
+The commands below are to use in your own terminal and the current directory has to be the one where your `package.json` is.
 
 1. `node index.js` to start your server. Another way of running your server is using NPM's script: `npm start` which is just an alias for the previous command. Prefer using the last as it is a way to standardize your server starting command.
 
