@@ -215,7 +215,7 @@ functionThatReturnsAPromise().then(function(value) {
 This time if the first promise returned by `functionThatReturnsAPromise()` is resolved we go into the first `then()` call which performs another asynchronous operation. That operation returns a promise as well so we can return the result of that function. As the first `then()` call returns a promise, it can be chained with another `then()`. In the second call we just return a primitive. _"How could we chain another `then()` in that case?"_. Well, `then()` and `catch()` always return a promise even though you did not return one explicitly. Internally it will wrap your returned value into a Promise. In that case, the third `then()` call will print `4`.
 
 Let's say the call to `anotherFunctionThatReturnsAPromise()` returns a rejected promise then the next 2 `then()` calls will be skipped and `catch()` will be called. It would be the same if a JavaScript error is thrown in a `then()` handler. One thing to remember is that any promise chain __should always be terminated by a `catch()` call__ and when I say always I mean __ALWAYS__! If you do not put one then your error will go silent and you will never know that there was even one to begin with!
-![Good luck meme](http://cdn.meme.am/instances/63982759.jpg)
+![Good luck meme](https://blog.homeceuconnection.com/wp-content/uploads/2014/11/goodluck.jpg)
 
 Bear in mind that this little introduction on Promises was only meant for you to know how to use them. We did not see how to create a Promise ourselves nor other operations you can perform on them. If you want to learn more, [here](https://github.com/wbinnssmith/awesome-promises) is a list of resources you can read.
 
