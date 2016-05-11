@@ -129,7 +129,7 @@ var taskDb = {
     for (var id in this.data) {
       ret.push(this.data[id]);
     }
-    
+
     return ret;
   }
 };
@@ -202,7 +202,7 @@ describe('Task [endpoint]:', function() {
 
 ````
 
-For this test to work you have to define your server instance as the public interface of your `index.js` module. So when you require `server.js` you get your server instance. Refer to [this](#modules_public_api) section for more information.
+For this test to work you have to define your server instance as the public interface of your `index.js` module. So when you require `server.js` you get your server instance. Refer to [this](#modules-public-api) section for more information.
 
 I just gave you the first test for your server. It tests your /tasks [GET] route. In order to fully understand the code, even though some parts are self-explanatory, you need some more information:
 
