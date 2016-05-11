@@ -86,7 +86,11 @@ The commands below are to use in your own terminal and the current directory has
 
 2. `node` to access a Node CLI where you can execute JavaScript code. It is useful to make quick tests on something without writing a proper file for it.
 
-3. `npm install [packageName]` to install a package in your project. If you don't provide a package name it will install all the dependencies written in your `package.json`. This will download the package into the `node_modules` folder at your project root. If you want to mark this package as a dependency in your project you need to add the flag `--save` and respectively `--save-dev` for a development dependency. When using the above flags, the dependency will be written in your __package.json__ along with their [semver](https://github.com/npm/node-semver) version notation.
+3. `npm install [packageName]` to install a package in your project. It will be downloaded into the `node_modules` folder at your project root.
+
+4. `npm install [packageName] --save` to install the package and mark it as a dependency of your project and respectively `--save-dev` for a development dependency. When using the above flags, the dependency will be written in your __package.json__ along with their [semver](https://github.com/npm/node-semver) version notation.
+
+5. `npm install` to install all the dependencies written in your `package.json`. They will be downloaded into the `node_modules` folder at your project root.
 
 #### Notes
 
