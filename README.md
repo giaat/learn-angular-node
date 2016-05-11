@@ -29,6 +29,47 @@ In this project we are using Node for web development. In that context, we are g
 ### Node basic knowledge
 NodeJS is based around the __module__ concept. I recommend you to read [that part](https://nodejs.org/docs/latest/api/modules.html#modules_modules) of NodeJS official documentation. In order to use these modules in our code, we need a __module loader__. Do not worry I am not going to ask you to write one, someone already did it: [RequireJS](http://requirejs.org/). It is already shipped within NodeJS so no need to worry about it.
 
+#### Modules public API
+Every JS file you create in NodeJS are wrapped in a module. If you want your module to be used somewhere else you need to define its **public API**. In other words, you will need to define the **functions/properties/objects** which people will have access to when requiring your module. To declare the public interface of your module you have to use the `module.exports` object available in all NodeJS modules. You can either affect something to `module.exports` or add properties to `exports` both are made available to your module by NodeJS. Here are some examples:
+
+```javascript
+// myApp/modules/answer.js
+
+// you can affect a function to module.exports but you can affect pretty much anything
+module.exports = function getUniversalAnswer() {
+  return 42;
+};
+
+// if you require your Answer module in another file, you would get a function from your require call
+// notice that I don't need to write the js extension when requiring the module
+var answerModule = require('./answer');
+
+console.log(typeof answerModule); // prints 'Function'
+answerModule(); // returns 42
+
+```
+
+```javascript
+// myApp/modules/otherModule.js
+
+exports.getMyName = function() {
+  return 'toto';
+};
+
+
+exports.getWeekDay = function() {
+  return 'Monday';
+};
+
+// this time if you require this module in another file, you would get an object with 2 methods: getMyName() and getWeekDay().
+var otherModule = require('./otherModule');
+
+console.log(typeof otherModule); // prints 'Object'
+otherModule.getMyName(); // returns 'toto'
+otherModule.getWeekDay(); // returns 'Monday'
+
+```
+
 ### Folder structure
 Every NodeJS server has a main file from which the server is started. In this file you will find the server initialization and configuration. It is also the file which bootstraps your application - put all the pieces of your server together -. By convention it is called `index.js` but that's not a must-do. In our case it is called `server.js` and you can find it at the root of `server/`.
 
@@ -147,6 +188,8 @@ describe('Task [endpoint]:', function() {
 });
 
 ````
+
+For this test to work you have to define your server instance as the public interface of your `index.js` module. So when you require `server.js` you get your server instance. Refer to [this](#modules_public_api) section for more information.
 
 I just gave you the first test for your server. It tests your /tasks [GET] route. In order to fully understand the code, even though some parts are self-explanatory, you need some more information:
 
