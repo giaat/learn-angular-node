@@ -103,31 +103,44 @@ Let's now dive into our server requirements ... For the client to interact with 
 * `/tasks/delete/{id}` [DELETE] : delete the task referenced by the id.
 * `/tasks/update/{id}` [PUT] : updates the information of the task referenced by the id.
 
-Now that's your job to implement these routes! For the moment we are not using any database, we will dive into that later. If you need data, just use JS objects with dummy information. For example:
+Now that's your job to implement these routes! For the moment we are not using any database, we will dive into that later. If you need to manage data inside your routes as creating a new Task from the information you received or returning a Task according to its id, just use JS objects with dummy information. For example:
 ````javascript
 
-var userDb = {
-  1: {
-    id: 1,
-    name: 'Darth',
-    surname: 'Vador',
-    email: 'd.vador@darkside.org'
+var taskDb = {
+  data: {
+    1: {
+      id: 1,
+      title: 'My little task',
+      content: 'I must wash my clothes before going to bed!',
+      tags: ['before', 'bed', 'wash']
+    },
+    10: {
+      id: 10,
+      title: 'TODO',
+      content: 'Clean the house, buy pizza, buy beer',
+      tags: ['evening', 'todo', 'YAY']
+    }
   },
-  10: {
-    id: 10,
-    name: 'Skywalker',
-    surname: 'Luke',
-    email: 'l.skywalker@brightside.org'
+  getById: function(id) {
+    return this.data[id];
+  },
+  getAll: function() {
+    var ret = [];
+    for (var id in this.data) {
+      ret.push(this.data[id]);
+    }
+    
+    return ret;
   }
 };
 
-function getUser(id) {
-  // here you are just acting as if you retrieved data from the database even though that's not the case
-  return userDb[id];
-}
 ````
 
-In order to handle error cases you can use [Boom](https://github.com/hapijs/boom). It is the HTTP error handling library developed by the Hapi team.
+You could now use the object `taskDb`, as if it was a database, in your routes' handlers in order to retrieve, update, delete tasks from it. It is quite simple and does not manage all the things a real database engine does but you get the picture. In order to build all the endpoints mentioned above you have to create new methods as `getById(id)` and `getAll()` but for the missing behavior: update, delete and add.
+
+Do not forget to handle the edge cases as well, what will you do if the id you received does not match any task inside your database?
+
+In order to handle error cases or special cases, you can use [Boom](https://github.com/hapijs/boom). It is the HTTP error handling library developed by the Hapi team.
 
 If you want to debug your API you can use [Postman](https://www.getpostman.com/) which is available as a Chrome app or a Mac App. If you prefer to test in your terminal, check out [curl](https://curl.haxx.se/).
 
