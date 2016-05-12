@@ -2,14 +2,18 @@
 
 var Hapi = require('hapi');
 var server = new Hapi.Server();
+var routes = require('./route');
 
 server.connection({
   host: 'localhost',
   port: 8888
 });
 
-/* Insert your code here */
-
-server.start(function() {
-  console.log('Server started on port 8888');
+server.start((err) => {
+    if (err) {
+      throw err;
+    }
+    console.log('Server running at:', server.info.uri);
 });
+
+server.route(routes);
