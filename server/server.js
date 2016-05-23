@@ -6,14 +6,15 @@ var routes = require('./route');
 
 server.connection({
   host: 'localhost',
-  port: 8888
+  port: 8888,
 });
 
 server.start((err) => {
-    if (err) {
-      throw err;
-    }
-    console.log('Server running at:', server.info.uri);
+  if (err) {
+    throw err;
+  } console.log('Server running at:', server.info.uri);
 });
 
 server.route(routes);
+
+module.exports = server;
