@@ -53,7 +53,6 @@ describe('Task [endpoint]:', function() {
       method: 'POST',
       url: '/tasks/create',
       payload: {
-        id:2,
         title:"Aller au Berthom",
         content:"RDV avec les potos",
         tags:["berthom","biere","saoul"]
@@ -70,7 +69,7 @@ describe('Task [endpoint]:', function() {
   it('should return "Task deleted" when contacted on /task/delete/{id}', function(done){
     var options = {
       method: 'DELETE',
-      url: '/tasks/delete/2'
+      url: '/tasks/delete/11'
     };
 
     server.inject(options, function(response){
@@ -109,6 +108,26 @@ describe('Task [endpoint]:', function() {
       var payload = JSON.parse(response.payload);
       assert.equal(payload.statusCode, 404);
       assert.equal(payload.message,"This task doesn't exist");
+      done();
+    });
+  });
+
+  it("should return an error with message'child \"tags\" fails because [\"tags\" must be an array]' when created a task and params tags isn't an array ", function(done){
+    var options = {
+      method: 'POST',
+      url: '/tasks/create',
+      payload: {
+        id:2,
+        title:"Aller au Berthom",
+        content:"RDV avec les potos",
+        tags: "tag without array"
+      }
+    };
+
+    server.inject(options, function(response){
+      var payload = JSON.parse(response.payload);
+      assert.equal(payload.statusCode, 400);
+      assert.equal(payload.message,"child \"tags\" fails because [\"tags\" must be an array]");
       done();
     });
   });

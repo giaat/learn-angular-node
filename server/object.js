@@ -15,18 +15,37 @@ module.exports = {
       tags: ['evening', 'todo', 'YAY']
     }
   },
+
   getById: function(id) {
     return this.data[id];
   },
-  addTask: function(newTask) {
-    this.data[newTask.id]=newTask;
+
+  addTask: function(payload) {
+    var keys = Object.keys(this.data);
+    var newID = parseInt(keys[keys.length-1])+1;
+    var newTask = {
+        id: newID,
+        title: payload.title,
+        content: payload.content,
+        tags: payload.tags,
+    };
+    this.data[newID]=newTask;
   },
+
   deleteTask: function(id) {
     delete this.data[id];
   },
-  updateTask: function(task) {
-    this.data[task.id]=task;
+
+  updateTask: function(payload, params) {
+    var task = {
+        id: params.id,
+        title: payload.title,
+        content: payload.content,
+        tags: payload.tags,
+    };
+    this.data[params.id]=task;
   },
+
   getAll: function() {
     var ret = [];
     for (var id in this.data) {

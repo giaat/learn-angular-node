@@ -2,6 +2,13 @@
 
 var tasksDb = require('./object');
 var Boom = require('boom');
+var Joi = require('joi');
+
+var schema = Joi.object().keys({
+    title: Joi.string().min(1).max(255).required(),
+    content: Joi.string().min(1),
+    tags: Joi.array()
+});
 
 module.exports = [
     {
@@ -34,17 +41,18 @@ module.exports = [
     {
         method: 'POST',
         path: '/tasks/create',
-        handler: function(request, reply) {
-            var newTask = {
-                id: request.payload.id,
-                title: request.payload.title,
-                content: request.payload.content,
-                tags: request.payload.tags,
-            };
-            tasksDb.addTask(newTask);
-            reply("Task added");
+        config: {
+            handler: function(request, reply) {
+                tasksDb.addTask(request.payload);
+                reply("Task added");
+            },
+
+            validate: {
+                payload: schema
+            }
         }
     },
+
 
     {
         method: 'DELETE',
@@ -61,19 +69,18 @@ module.exports = [
     {
         method: 'PUT',
         path: '/tasks/update/{id}',
-        handler: function(request, reply) {
-            if (tasksDb.getById(request.params.id) === undefined) {
-                return reply(Boom.notFound("This task doesn't exist"));
-            }
-            var task = {
-                id: request.params.id,
-                title: request.payload.title,
-                content: request.payload.content,
-                tags: request.payload.tags,
-            };
+        config: {
+            handler: function(request, reply) {
+                if (tasksDb.getById(request.params.id) === undefined) {
+                    return reply(Boom.notFound("This task doesn't exist"));
+                }
+                tasksDb.updateTask(request.payload, request.params);
+                reply("Task updated");
+            },
 
-            tasksDb.updateTask(task);
-            reply("Task updated");
+            validate: {
+                payload: schema
+            }
         }
     }
 ];
