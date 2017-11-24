@@ -1,7 +1,7 @@
 'use strict';
 
-const tasksDb = require('./object');
 const Boom = require('boom');
+const Q = require('q');
 
 exports.getHelloWord = getHelloWord;
 exports.getAllTasks = getAllTasks;
@@ -15,59 +15,238 @@ function getHelloWord(request, reply) {
 }
 
 function getAllTasks(request, reply) {
-  reply(tasksDb.getAll());
+  const db = request.getDb();
+  const { sequelize } = db;
+  const { Task, Tag } = db.getModels();
+
+  const promise = Task.findAll({
+    attributes: {
+      exclude: ['createdAt', 'updatedAt'],
+    },
+    include: [
+      {
+        model: Tag,
+        as: 'tags',
+        attributes: {
+          exclude: ['createdAt', 'updatedAt'],
+        },
+      },
+    ],
+  }).catch(err => {
+    throw Boom.boomify(err);
+  });
+
+  reply(promise);
 }
 
 function getTaskById(request, reply) {
-  const taskID = tasksDb.getById(request.params.id);
+  const db = request.getDb();
+  const { sequelize } = db;
+  const { Task, Tag } = db.getModels();
 
-  if (taskID === undefined) {
-    return reply(Boom.notFound("This task doesn't exist"));
-  }
+  const taskID = request.params.id;
 
-  return reply(taskID);
+  const promise = Task.findOne({
+    where: {
+      id: taskID,
+    },
+    attributes: {
+      exclude: ['createdAt', 'updatedAt'],
+    },
+    include: [
+      {
+        model: Tag,
+        as: 'tags',
+        attributes: {
+          exclude: ['createdAt', 'updatedAt'],
+        },
+      },
+    ],
+  })
+    .then(task => {
+      if (task === null) {
+        throw Boom.notFound(`La tâche n'existe pas (id: ${taskID})`);
+      }
+
+      return task;
+    })
+    .catch(err => {
+      throw Boom.boomify(err);
+    });
+
+  reply(promise);
 }
 
 function createTask(request, reply) {
-  const newTask = {
-    id: request.payload.id,
-    title: request.payload.title,
-    content: request.payload.content,
-    tags: request.payload.tags,
-  };
+  const db = request.getDb();
+  const { sequelize } = db;
+  const { Task, Tag } = db.getModels();
 
-  tasksDb.addTask(newTask);
+  const payloadTags = request.payload.tags;
+  delete request.payload.tags;
+  const payloadTask = request.payload;
 
-  reply('Task added');
+  let newTask;
+
+  const promise = sequelize.transaction(transaction => {
+    const insidePromise = Task.create(payloadTask, { transaction })
+      .then(taskDb => {
+        newTask = taskDb;
+        const promises = payloadTags.map(tag => {
+          return taskDb.createTag({ title: tag }, { transaction });
+        });
+
+        return Q.all(promises);
+      })
+      .then(TagsDb => {
+        return Task.findOne({
+          where: {
+            id: newTask.id,
+          },
+          attributes: {
+            exclude: ['createdAt', 'updatedAt'],
+          },
+          include: [
+            {
+              model: Tag,
+              as: 'tags',
+              attributes: {
+                exclude: ['createdAt', 'updatedAt'],
+              },
+            },
+          ],
+          transaction,
+        });
+      })
+      .catch(err => {
+        throw Boom.boomify(err);
+      });
+
+    return insidePromise;
+  });
+
+  reply(promise);
 }
 
 function updateTask(request, reply) {
-  const taskToUpdateID = tasksDb.getById(request.params.id);
+  const db = request.getDb();
+  const { sequelize } = db;
+  const { Task, Tag } = db.getModels();
 
-  if (taskToUpdateID === undefined) {
-    return reply(Boom.notFound("This task doesn't exist"));
-  }
+  const taskID = request.params.id;
+  const payloadTags = request.payload.tags;
+  delete request.payload.tags;
+  const payloadTask = request.payload;
 
-  var taskUpdated = {
-    id: request.params.id,
-    title: request.payload.title,
-    content: request.payload.content,
-    tags: request.payload.tags,
-  };
+  let updatedTask;
 
-  tasksDb.updateTask(taskUpdated);
+  const promise = sequelize.transaction(transaction => {
+    const insidePromise = Task.findOne({
+      where: {
+        id: taskID,
+      },
+      attributes: {
+        exclude: ['createdAt', 'updatedAt'],
+      },
+      include: [
+        {
+          model: Tag,
+          as: 'tags',
+          attributes: {
+            exclude: ['createdAt', 'updatedAt'],
+          },
+        },
+      ],
+      transaction,
+    })
+      .then(task => {
+        if (task === null) {
+          throw Boom.notFound(`La tâche n'existe pas (id: ${taskID})`);
+        }
 
-  reply('Task updated');
+        return task.update(payloadTask, { transaction });
+      })
+      .then(taskDb => {
+        updatedTask = taskDb;
+
+        const promisesDestroy = updatedTask.tags.map(tag => {
+          return tag.destroy({ transaction });
+        });
+
+        return Q.all(promisesDestroy);
+      })
+      .then(() => {
+        const promisesCreate = payloadTags.map(tag => {
+          return updatedTask.createTag({ title: tag }, { transaction });
+        });
+
+        return Q.all(promisesCreate);
+      })
+      .then(() =>
+        Task.findOne({
+          where: { id: taskID },
+          attributes: {
+            exclude: ['createdAt', 'updatedAt'],
+          },
+          include: [
+            {
+              model: Tag,
+              as: 'tags',
+              attributes: {
+                exclude: ['createdAt', 'updatedAt'],
+              },
+            },
+          ],
+          transaction,
+        })
+      )
+      .catch(err => {
+        throw Boom.boomify(err);
+      });
+
+    return insidePromise;
+  });
+
+  reply(promise);
 }
 
 function deleteTask(request, reply) {
-  const taskToDeleteID = tasksDb.getById(request.params.id);
+  const db = request.getDb();
+  const { sequelize } = db;
+  const { Task, Tag } = db.getModels();
 
-  if (taskToDeleteID === undefined) {
-    return reply(Boom.notFound("This task doesn't exist"));
-  }
+  const taskID = request.params.id;
 
-  tasksDb.deleteTask(taskToDeleteID);
+  const promise = Task.findOne({
+    where: {
+      id: taskID,
+    },
+    attributes: {
+      exclude: ['createdAt', 'updatedAt'],
+    },
+    include: [
+      {
+        model: Tag,
+        as: 'tags',
+        attributes: {
+          exclude: ['createdAt', 'updatedAt'],
+        },
+      },
+    ],
+  })
+    .then(task => {
+      if (task === null) {
+        throw Boom.notFound(`La tâche n'existe pas (id: ${taskID})`);
+      }
 
-  reply('Task deleted');
+      return task.destroy();
+    })
+    .then(() => {
+      return 'Task deleted';
+    })
+    .catch(err => {
+      throw Boom.boomify(err);
+    });
+
+  reply(promise);
 }

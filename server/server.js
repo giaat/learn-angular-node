@@ -22,7 +22,7 @@ server
       options: {
         name: 'db',
         sequelize: new Sequelize('learn-angular-node', 'postgres', 'mathilde22', opts),
-        models: ['models/**/*.js'],
+        models: ['lib/**/model.js', 'lib/**/models/*.js'],
       },
     },
     require('./lib/task'),

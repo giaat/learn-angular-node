@@ -15,6 +15,15 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       tableName: 'Task',
+      classMethods: {
+        associate(db) {
+          this.hasMany(db.Tag, {
+            as: 'tags',
+            foreignKey: 'taskId',
+            onDelete: 'CASCADE',
+          });
+        },
+      },
     }
   );
 

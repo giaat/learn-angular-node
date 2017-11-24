@@ -1,18 +1,23 @@
 {
   "name": "learn-angular-node",
   "version": "0.1.0",
-  "description":
-    "Project used to teach basic concepts of using angular and node for a REST API development.",
+  "description": "Project used to teach basic concepts of using angular and node for a REST API development.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "test": "mocha test"
+    "test": "mocha test",
+    "fixtures": "node ./fixtures/fixtures.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/dixeed/learn-angular-node.git"
   },
-  "keywords": ["node", "angular", "teaching", "hapi"],
+  "keywords": [
+    "node",
+    "angular",
+    "teaching",
+    "hapi"
+  ],
   "author": "Nargonath",
   "license": "MIT",
   "bugs": {
@@ -27,7 +32,7 @@
     "limax": "^1.5.0",
     "pg": "^6.1.2",
     "pg-hstore": "^2.3.2",
-    "q": "^1.4.1",
+    "q": "^1.5.1",
     "request": "^2.79.0",
     "request-promise": "^4.1.1",
     "sequelize": "^3.28.0"
